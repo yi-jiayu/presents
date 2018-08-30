@@ -1,4 +1,9 @@
 # presents
+[![GoDoc](https://godoc.org/github.com/yi-jiayu/presents?status.svg)](https://godoc.org/github.com/yi-jiayu/presents)
+[![Build Status](https://travis-ci.com/yi-jiayu/presents.svg?branch=master)](https://travis-ci.com/yi-jiayu/presents)
+[![codecov](https://codecov.io/gh/yi-jiayu/presents/branch/master/graph/badge.svg)](https://codecov.io/gh/yi-jiayu/presents)
+[![Go Report Card](https://goreportcard.com/badge/github.com/yi-jiayu/presents)](https://goreportcard.com/report/github.com/yi-jiayu/presents)
+
 Like [hashids](https://hashids.org/), but based on the PRESENT block cipher as defined by Bogdanov et al. [1].
 
 Inspired by [this StackOverflow answer](https://stackoverflow.com/a/8554984) suggesting using a block cipher to obfuscate IDs.
