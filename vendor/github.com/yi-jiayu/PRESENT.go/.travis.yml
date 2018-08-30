@@ -1,0 +1,8 @@
+language: go
+go:
+  - "1.11"
+  - "1.10"
+script:
+  - go test -v -coverprofile=coverage.out -covermode=count
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
