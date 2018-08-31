@@ -57,10 +57,10 @@ $ go test -bench .
 goos: windows
 goarch: amd64
 pkg: github.com/yi-jiayu/presents
-BenchmarkPresents_Wrap-4                  100000             11688 ns/op
-BenchmarkPresentsTripleDES_Wrap-4        1000000              1895 ns/op
+BenchmarkPresents_Wrap-4                  200000             10516 ns/op
+BenchmarkPresentsTripleDES_Wrap-4        2000000               631 ns/op
 PASS
-ok      github.com/yi-jiayu/presents    3.566s
+ok      github.com/yi-jiayu/presents    4.428s
 ```
 
 ## References 
