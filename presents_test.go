@@ -172,3 +172,25 @@ func TestPresentsTripleDES_Unwrap(t *testing.T) {
 		assert.Equal(t, expected, s)
 	})
 }
+
+func BenchmarkPresents_Wrap(b *testing.B) {
+	key := make([]byte, 10)
+	p, err := presents.New(key, nil)
+	if err != nil {
+		b.Fatal(err)
+	}
+	for i := 0; i < b.N; i++ {
+		p.Wrap(uint64(i))
+	}
+}
+
+func BenchmarkPresentsTripleDES_Wrap(b *testing.B) {
+	key := make([]byte, 24)
+	p, err := presents.NewTripleDES(key, nil)
+	if err != nil {
+		b.Fatal(err)
+	}
+	for i := 0; i < b.N; i++ {
+		p.Wrap(uint64(i))
+	}
+}

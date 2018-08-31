@@ -49,6 +49,19 @@ func main() {
 }
 ```
 
+## Performance
+Triple DES is about 20 times faster than PRESENT:
+
+```console
+$ go test -bench .
+goos: windows
+goarch: amd64
+pkg: github.com/yi-jiayu/presents
+BenchmarkPresents_Wrap-4                  100000             11688 ns/op
+BenchmarkPresentsTripleDES_Wrap-4        1000000              1895 ns/op
+PASS
+ok      github.com/yi-jiayu/presents    3.566s
+```
 
 ## References 
 1. Bogdanov A. et al. (2007) PRESENT: An Ultra-Lightweight Block Cipher. In: Paillier P., Verbauwhede I. (eds) Cryptographic Hardware and Embedded Systems - CHES 2007. CHES 2007. Lecture Notes in Computer Science, vol 4727. Springer, Berlin, Heidelberg ([pdf](http://www.lightweightcrypto.org/present/present_ches2007.pdf))
