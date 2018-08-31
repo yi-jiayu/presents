@@ -2,6 +2,7 @@ package presents
 
 import (
 	"crypto/cipher"
+	"crypto/des"
 	"encoding/binary"
 	"fmt"
 
@@ -14,7 +15,7 @@ const DefaultAlphabet = alphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghij
 // Presents contains a cipher.Block implementing PRESENT
 // and an alphabet for converting between 64-bit integers and strings.
 type Presents struct {
-	pres     cipher.Block
+	cipher   cipher.Block
 	alphabet alphabet
 }
 
@@ -25,10 +26,18 @@ type Options struct {
 	Seed     int64
 }
 
-// New creates a new Presents struct given a PRESENT key and optional customisation options.
+// New creates a new Presents struct using the PRESENT block cipher.
 // If options.Alphabet is not the empty string, it will be used as the alphabet.
 // If options.Shuffle is true, the alphabet will be shuffled based on options.Seed.
 func New(key []byte, options *Options) (*Presents, error) {
+	c, err := present.NewCipher(key)
+	if err != nil {
+		return nil, fmt.Errorf("presids: new: %v", err)
+	}
+	return newPresents(c, options)
+}
+
+func newPresents(c cipher.Block, options *Options) (*Presents, error) {
 	a := DefaultAlphabet
 	if options != nil {
 		if options.Alphabet != "" {
@@ -42,22 +51,29 @@ func New(key []byte, options *Options) (*Presents, error) {
 			a = a.Shuffle(options.Seed)
 		}
 	}
-	p, err := present.NewCipher(key)
+	return &Presents{
+		cipher:   c,
+		alphabet: a,
+	}, nil
+}
+
+// NewTripleDES creates a new Presents struct using Triple DES instead of PRESENT.
+// If options.Alphabet is not the empty string, it will be used as the alphabet.
+// If options.Shuffle is true, the alphabet will be shuffled based on options.Seed.
+func NewTripleDES(key []byte, options *Options) (*Presents, error) {
+	c, err := des.NewTripleDESCipher(key)
 	if err != nil {
 		return nil, fmt.Errorf("presids: new: %v", err)
 	}
-	return &Presents{
-		pres:     p,
-		alphabet: a,
-	}, nil
+	return newPresents(c, options)
 }
 
 // Wrap converts an unsigned 64-bit integer to a string.
 func (p *Presents) Wrap(n uint64) string {
 	b := make([]byte, 8)
 	binary.BigEndian.PutUint64(b, n)
-	dst := make([]byte, present.BlockSize)
-	p.pres.Encrypt(dst, b)
+	dst := make([]byte, 8)
+	p.cipher.Encrypt(dst, b)
 	n = binary.BigEndian.Uint64(dst)
 	return p.alphabet.Encode(n)
 }
@@ -69,10 +85,10 @@ func (p *Presents) Unwrap(s string) (uint64, error) {
 	if err != nil {
 		return 0, err
 	}
-	src := make([]byte, present.BlockSize)
+	src := make([]byte, 8)
 	binary.BigEndian.PutUint64(src, n)
-	dst := make([]byte, present.BlockSize)
-	p.pres.Decrypt(dst, src)
+	dst := make([]byte, 8)
+	p.cipher.Decrypt(dst, src)
 	n = binary.BigEndian.Uint64(dst)
 	return n, nil
 }

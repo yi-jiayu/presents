@@ -32,12 +32,11 @@ func (a alphabet) Shuffle(seed int64) alphabet {
 }
 
 func (a alphabet) Encode(n uint64) string {
-	b := len(a)
+	b := uint64(len(a))
 	s := make([]byte, a.encodedLen(n))
 	for i := 0; n > 0; i++ {
-		// ok to truncate here since the alphabet should only comprise of printable characters
-		s[i] = a[int(n)%b]
-		n /= uint64(b)
+		s[i] = a[n%b]
+		n /= b
 	}
 	return string(s)
 }
