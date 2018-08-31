@@ -4,15 +4,17 @@
 [![codecov](https://codecov.io/gh/yi-jiayu/presents/branch/master/graph/badge.svg)](https://codecov.io/gh/yi-jiayu/presents)
 [![Go Report Card](https://goreportcard.com/badge/github.com/yi-jiayu/presents)](https://goreportcard.com/report/github.com/yi-jiayu/presents)
 
-Like [hashids](https://hashids.org/), but based on the PRESENT block cipher as defined by Bogdanov et al. [1].
+Like [hashids](https://hashids.org/), but based on block ciphers.
 
 Inspired by [this StackOverflow answer](https://stackoverflow.com/a/8554984) suggesting using a block cipher to obfuscate IDs.
 
 ## How it works
 
-The PRESENT block cipher operates on 8-byte (64-bit) blocks and supports key lengths of 80-bits or 128-bits. It can be used to create a reversible mapping from 64-bit integers to 64-bit integers.
+The PRESENT block cipher [1] operates on 8-byte (64-bit) blocks and supports key lengths of 80-bits or 128-bits. It can be used to create a reversible mapping from 64-bit integers to 64-bit integers.
 
 The resultant 64-bit integer is then converted to and from a string using an arbitrary change of base algorithm and a provided alphabet.
+
+Triple DES, which also has a 64-bit block size, can be used as well.
 
 ## Usage
 ```go
@@ -29,6 +31,9 @@ func main() {
 	// 80-bit PRESENT block cipher key
 	key := make([]byte, 10)
 	p, err := presents.New(key, nil)
+	// with 3DES instead of PRESENT
+	// key := make([]byte, 24)
+	// p, err := presents.NewTripleDES(key, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
