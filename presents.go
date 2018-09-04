@@ -36,7 +36,7 @@ type Options struct {
 func New(key []byte, options *Options) (*Presents, error) {
 	c, err := present.NewCipher(key)
 	if err != nil {
-		return nil, fmt.Errorf("presids: new: %v", err)
+		return nil, fmt.Errorf("presents: New: %v", err)
 	}
 	return NewWithCipher(c, options)
 }
@@ -73,7 +73,7 @@ func NewWithCipher(c cipher.Block, options *Options) (*Presents, error) {
 func NewTripleDES(key []byte, options *Options) (*Presents, error) {
 	c, err := des.NewTripleDESCipher(key)
 	if err != nil {
-		return nil, fmt.Errorf("presids: new: %v", err)
+		return nil, fmt.Errorf("presents: NewTripleDES: %v", err)
 	}
 	return NewWithCipher(c, options)
 }

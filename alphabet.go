@@ -13,7 +13,7 @@ func newAlphabet(s string) (alphabet, error) {
 	uniq := make(map[rune]struct{})
 	for _, c := range s {
 		if _, ok := uniq[c]; ok {
-			return "", errors.New("presids: new alphabet: all characters in s must be unique")
+			return "", errors.New("presents: all characters in alphabet must be unique")
 		}
 		uniq[c] = struct{}{}
 	}
@@ -48,7 +48,7 @@ func (a alphabet) Decode(s string) (uint64, error) {
 	for _, c := range []byte(s) {
 		x := strings.IndexByte(string(a), c)
 		if x == -1 {
-			return 0, errors.New("presids: decode alphabet: invalid input")
+			return 0, errors.New("presents: Unwrap: invalid input")
 		}
 		n += uint64(x * mag)
 		mag *= b
