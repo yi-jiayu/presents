@@ -7,6 +7,7 @@ import (
 	"crypto/cipher"
 	"crypto/des"
 	"encoding/binary"
+	"errors"
 	"fmt"
 
 	"github.com/yi-jiayu/PRESENT.go"
@@ -37,10 +38,16 @@ func New(key []byte, options *Options) (*Presents, error) {
 	if err != nil {
 		return nil, fmt.Errorf("presids: new: %v", err)
 	}
-	return newPresents(c, options)
+	return NewWithCipher(c, options)
 }
 
-func newPresents(c cipher.Block, options *Options) (*Presents, error) {
+// NewWithCipher returns a new Presents instance from the provided cipher.Block and options.
+// The provided cipher.Block should have a 64-bit block size.
+func NewWithCipher(c cipher.Block, options *Options) (*Presents, error) {
+	if c.BlockSize() != 8 {
+		return nil, errors.New("presents: NewWithCipher: cipher should have a 64-bit block size")
+	}
+
 	a := DefaultAlphabet
 	if options != nil {
 		if options.Alphabet != "" {
@@ -68,7 +75,7 @@ func NewTripleDES(key []byte, options *Options) (*Presents, error) {
 	if err != nil {
 		return nil, fmt.Errorf("presids: new: %v", err)
 	}
-	return newPresents(c, options)
+	return NewWithCipher(c, options)
 }
 
 // Wrap converts an unsigned 64-bit integer to a string.
