@@ -1,3 +1,6 @@
+// Package presents implements a block cipher-based method of converting 64-bit unsigned integers to and from strings.
+//
+// The intended application is towards the obfuscation of sequential database IDs.
 package presents
 
 import (
