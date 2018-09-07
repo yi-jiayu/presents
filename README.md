@@ -50,17 +50,18 @@ func main() {
 ```
 
 ## Performance
-Triple DES is about 20 times faster than PRESENT:
+Some benchmarks on my i5-7200U:
 
 ```console
-$ go test -bench .
+$ go test -bench . -benchtime 10s
 goos: windows
 goarch: amd64
 pkg: github.com/yi-jiayu/presents
-BenchmarkPresents_Wrap-4                  200000             10516 ns/op
-BenchmarkPresentsTripleDES_Wrap-4        2000000               631 ns/op
+BenchmarkPresents_Wrap-4                 1000000             10344 ns/op
+BenchmarkPresentsTripleDES_Wrap-4       20000000               621 ns/op
+BenchmarkPresentsBlowFish_Wrap-4        50000000               347 ns/op
 PASS
-ok      github.com/yi-jiayu/presents    4.428s
+ok      github.com/yi-jiayu/presents    41.590s
 ```
 
 ## References 

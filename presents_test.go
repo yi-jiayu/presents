@@ -1,10 +1,12 @@
 package presents_test
 
 import (
+	"log"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/yi-jiayu/presents"
+	"golang.org/x/crypto/blowfish"
 )
 
 func TestPresents_Wrap(t *testing.T) {
@@ -189,6 +191,21 @@ func BenchmarkPresentsTripleDES_Wrap(b *testing.B) {
 	p, err := presents.NewTripleDES(key, nil)
 	if err != nil {
 		b.Fatal(err)
+	}
+	for i := 0; i < b.N; i++ {
+		p.Wrap(uint64(i))
+	}
+}
+
+func BenchmarkPresentsBlowFish_Wrap(b *testing.B) {
+	key := make([]byte, 56)
+	c, err := blowfish.NewCipher(key)
+	if err != nil {
+		log.Fatal(err)
+	}
+	p, err := presents.NewWithCipher(c, nil)
+	if err != nil {
+		log.Fatal(err)
 	}
 	for i := 0; i < b.N; i++ {
 		p.Wrap(uint64(i))
